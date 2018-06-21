@@ -11,10 +11,11 @@ https://www.csie.ntu.edu.tw/~htlin/course/ml15fall/
 https://blog.csdn.net/a1015553840/article/details/51085129  
 http://www.vynguyen.net/category/study/machine-learning/page/6/  
 http://book.caltech.edu/bookforum/index.php
+http://beader.me/mlnotebook/
 
 
 
-补充说明：仓库中有三类文件，分别是Jupyter Notebook,pdf,md，可以随意使用，推荐使用Jupyter Notebook
+补充说明：仓库中有三类文件，分别是Jupyter Notebook,pdf,md，可以随意使用，推荐使用Jupyter Notebook。从作业三开始，会把代码单独保存为py文件方便查阅，后续也会将作业一，二的代码保存下来。
 
 
 
