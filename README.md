@@ -12,7 +12,8 @@ https://blog.csdn.net/a1015553840/article/details/51085129
 http://www.vynguyen.net/category/study/machine-learning/page/6/  
 http://book.caltech.edu/bookforum/index.php  
 http://beader.me/mlnotebook/  
-https://blog.csdn.net/qian1122221
+https://blog.csdn.net/qian1122221  
+https://acecoooool.github.io/blog/
 
 
 
@@ -34,3 +35,4 @@ https://blog.csdn.net/qian1122221
 
 2018/7/29	上传HW5
 
+2018/8/7	上传HW6
