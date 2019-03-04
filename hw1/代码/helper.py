@@ -15,7 +15,7 @@ def Judge(X, y, w):
     判别函数，判断所有数据是否分类完成
     """
     n = X.shape[0]
-    #判断是否同号
+    #判断是否分类完成
     num = np.sum(X.dot(w) * y > 0)
     return num == n
 
@@ -39,7 +39,6 @@ def count(X, y, w):
     """
     统计错误数量
     """
-    #判断是否同号
     num = np.sum(X.dot(w) * y <= 0)
     return np.sum(num)
 

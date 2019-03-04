@@ -33,6 +33,7 @@ def decision_stump(X, y):
     theta = Theta(X1)
     #向量化执行计算
     n = theta.shape[0]
+    m = X.shape[0]
     #将X复制按横轴n份
     X = np.tile(X, (n, 1))
     #s=1
@@ -49,11 +50,11 @@ def decision_stump(X, y):
     if error1[i1] < error2[i2]:
         s = 1
         t = theta[i1][0]
-        error = error1[i1] / n
+        error = error1[i1] / m
     else:
         s = -1
         t = theta[i2][0]
-        error = error2[i2] / n
+        error = error2[i2] / m
     return s, t, error
 
 Ein = []
