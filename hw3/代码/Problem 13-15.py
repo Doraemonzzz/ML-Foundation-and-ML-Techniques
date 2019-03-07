@@ -1,52 +1,47 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jun 22 07:21:42 2018
+Created on Wed Mar  6 17:28:37 2019
 
-@author: Administrator
+@author: qinzhen
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
+from numpy.linalg import inv
+from sklearn.preprocessing import PolynomialFeatures
 plt.rcParams['font.sans-serif']=['SimHei'] #用来正常显示中文标签
 plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
 
 #产生n组点
-def generate(n):
-    data=[]
-    for i in range(n):
-        x=np.random.uniform(-1,1)
-        y=np.random.uniform(-1,1)
-        flag=np.sign(x*x+y*y-0.6)
-        p=np.random.random()
-        if (p<0.1):
-            flag*=-1
-        data.append([x,y,flag])
-    return data
-        
-data=generate(1000)
+def generate(n, p=0.1):
+    X = np.random.uniform(-1, 1, size=(n, 2))
+    y = np.sign(np.sum(X ** 2, axis=1) - 0.6)
+    #翻转
+    P = np.random.uniform(0, 1, n)
+    y[P < p] *= -1
+    #产生数据
+    return X, y
 
-x1=[i[0] for i in data if i[-1]>0]
-y1=[i[1] for i in data if i[-1]>0]
-x2=[i[0] for i in data if i[-1]<0]
-y2=[i[1] for i in data if i[-1]<0]
+#数据数量
+n = 1000
+#实验次数
+m = 1000     
+X, y = generate(n)
 
-plt.scatter(x1,y1,s=1)
-plt.scatter(x2,y2,s=1)
+plt.scatter(X[y>0][:, 0], X[y>0][:, 1], s=1)
+plt.scatter(X[y<0][:, 0], X[y<0][:, 1], s=1)
 plt.show()
 
 #Problem 13
-from numpy.linalg import inv
+Ein = np.array([])
+for i in range(m):
+    X, y = generate(n)
+    X = np.c_[np.ones(n), X]
 
-Ein=np.array([])
-for i in range(1000):
-    data=generate(1000)
-    X=np.array([[1]+i[:-1] for i in data])
-    Y=np.array([i[-1] for i in data])
+    w = inv(X.T.dot(X)).dot(X.T).dot(y)
 
-    w=inv(X.T.dot(X)).dot(X.T).dot(Y)
-
-    error=np.sum(np.sign(X.dot(w)*Y)<0)/1000
-    Ein=np.append(Ein,error)
+    ein = np.mean(np.sign(X.dot(w) * y) < 0 )
+    Ein = np.append(Ein, ein)
 
 print(np.average(Ein))
 plt.hist(Ein)
@@ -54,34 +49,35 @@ plt.title('Ein without feature transform')
 plt.show()
 
 #Problem 14
-W=[]
-Eout=np.array([])
-for i in range(1000):
-    data=generate(1000)
-    X=np.array([[1]+i[:-1]+[i[0]*i[1],i[0]**2,i[1]**2] for i in data])
-    Y=np.array([i[-1] for i in data])
+#多项式转换器
+poly = PolynomialFeatures(2)
+W = []
+Eout = np.array([])
+Ein = np.array([])
+for i in range(m):
+    X, y = generate(n)
+    X_poly = poly.fit_transform(X)
     
-    w=inv(X.T.dot(X)).dot(X.T).dot(Y)
-    
-    #测试数据
-    data1=generate(1000)
-    X1=np.array([[1]+i[:-1]+[i[0]*i[1],i[0]**2,i[1]**2] for i in data1])
-    Y1=np.array([i[-1] for i in data1])
+    w_poly = inv(X_poly.T.dot(X_poly)).dot(X_poly.T).dot(y)
 
-    error=np.sum(np.sign(X1.dot(w)*Y1)<0)/1000
-    Eout=np.append(Eout,error)
+    ein = np.mean(np.sign(X_poly.dot(w_poly) * y) < 0)
+    Ein = np.append(Ein, ein)
+    #测试数据
+    X_test, y_test = generate(n)
+    X_test_poly = poly.fit_transform(X_test)
+    eout = np.mean(np.sign(X_test_poly.dot(w_poly) * y_test) < 0)
+    Eout  = np.append(Eout, eout)
     
     #记录w
-    W.append(w)
+    W.append(w_poly)
 
-W=np.array(W)
-w3=np.array([i[3] for i in W])
+W = np.array(W)
+w3 = W[:, 4]
 plt.hist(w3)
 plt.title('w3')
 plt.show()
-
-print(W.mean(axis=0))
-print("w3的平均值"+str(w3.mean()))
+print("w3的均值{}".format(w3.mean()))
+print("w的均值" + str(np.mean(W, axis=0)))
 
 #Problem 15
 plt.hist(Eout)
