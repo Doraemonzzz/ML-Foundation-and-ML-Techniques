@@ -17,7 +17,7 @@ https://acecoooool.github.io/blog/
 
 <br/>
 
-补充说明：仓库中有三类文件，分别是Jupyter Notebook,pdf,md，可以随意使用，推荐使用Jupyter Notebook。从作业三开始，会把代码单独保存为py文件方便查阅，已存在代码文件夹中，后续也会将作业一，二的代码保存下来。  
+补充说明：仓库中有四类文件，分别是Jupyter Notebook，py，pdf，md，代码部分保存在Jupyter Notebook和py文件中。  
 
 
 
