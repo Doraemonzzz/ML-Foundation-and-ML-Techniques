@@ -81,13 +81,25 @@ plt.show()
 ####Problem 18
 C = [-3, -2, -1, 0, 1]
 Distance = []
+#将标签修改为-1, 1
+y = 2 * y_train_1 - 1
 
 for i in C:
     c = 10**i
     clf = svm.SVC(kernel='rbf', gamma=1, C=c)
-    clf.fit(X_train, y_train_1)
-    w = clf.dual_coef_[0].dot(clf.support_vectors_)
-    distance = 1 / np.linalg.norm(w)
+    clf.fit(X_train, y)
+    X = X_train[clf.support_]
+    #距离矩阵
+    d1 = np.sum(X ** 2, axis=1).reshape(-1, 1)
+    d2 = np.sum(X ** 2, axis=1).reshape(1, -1)
+    dist = d1 + d2 - 2 * X.dot(X.T)
+    #Kernel矩阵
+    K = np.exp(- c * dist)
+    #计算anyn
+    y1 = clf.dual_coef_[0] * y[clf.support_]
+    w2 = y1.dot(K).dot(y1.T)
+    #计算距离
+    distance = 1 / np.sqrt(w2)
     Distance.append(distance)
     
 plt.plot(C, Distance)
